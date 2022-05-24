@@ -50,7 +50,6 @@ public class ValidationItemControllerV2 {
     public String addItemV1(@ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         // BindingResult 는 @Model
 
-
         //검증 로직
         if (!StringUtils.hasText(item.getItemName())) {
             // FieldError 생성자 요약 ( String objectName, String field, String defaultMessage ) // objectName -> @ModelAttribute 이름 . field 오류 발생 필드, defaultMessage 기본 오류 메시
