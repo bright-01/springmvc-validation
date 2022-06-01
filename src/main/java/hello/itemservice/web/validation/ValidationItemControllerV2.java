@@ -30,7 +30,6 @@ public class ValidationItemControllerV2 {
     private final ItemValidator itemValidator;
 
     // ValidationItemControllerV2 컨트롤러가 호출 될때마다 initBainder가 호출된다
-
     @InitBinder
     public void init(WebDataBinder dataBinder) {
         dataBinder.addValidators(itemValidator);
