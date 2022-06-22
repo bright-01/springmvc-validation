@@ -1,4 +1,4 @@
-﻿package hello.itemservice.web.validation;
+package hello.itemservice.web.validation;
 
 import hello.itemservice.domain.item.Item;
 import org.springframework.stereotype.Component;
