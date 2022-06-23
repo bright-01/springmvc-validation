@@ -59,26 +59,26 @@ public class ValidationItemControllerV3 {
     @PostMapping("/add") // @Validated 를 넣으면 알아서 동작함
     public String addItem(@Validated @ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
-        if (item.getPrice() != null && item.getQuantity() != null) {
-            int resultPrice = item.getPrice() * item.getQuantity();
-            if (resultPrice < 10000) {
-                bindingResult.reject("totalPriceMin", new Object[]{10000, resultPrice}, null);
-            }
-        }
+        extracted(item, bindingResult);
 
 
-
-        //검증에 실패하면 다시 입력 폼으로
-        if (bindingResult.hasErrors()) {
-            log.info("errors = {}", bindingResult);
-            return "validation/v3/addForm";
-        }
+        String errors = hasErrors(bindingResult);
+        if (errors != null) return errors;
 
         //성공 로직
         Item savedItem = itemRepository.save(item);
         redirectAttributes.addAttribute("itemId", savedItem.getId());
         redirectAttributes.addAttribute("status", true);
         return "redirect:/validation/v3/items/{itemId}";
+    }
+
+    private String hasErrors(BindingResult bindingResult) {
+        //검증에 실패하면 다시 입력 폼으로
+        if (bindingResult.hasErrors()) {
+            log.info("errors = {}", bindingResult);
+            return "validation/v3/addForm";
+        }
+        return null;
     }
 
 
@@ -90,9 +90,23 @@ public class ValidationItemControllerV3 {
     }
 
     @PostMapping("/{itemId}/edit")
-    public String edit(@PathVariable Long itemId, @ModelAttribute Item item) {
+    public String edit(@PathVariable Long itemId, @Validated @ModelAttribute Item item, BindingResult bindingResult) {
+        extracted(item, bindingResult);
+
+        String errors = hasErrors(bindingResult);
+        if (errors != null) return errors;
+
         itemRepository.update(itemId, item);
         return "redirect:/validation/v3/items/{itemId}";
+    }
+
+    private void extracted(Item item, BindingResult bindingResult) {
+        if (item.getPrice() != null && item.getQuantity() != null) {
+            int resultPrice = item.getPrice() * item.getQuantity();
+            if (resultPrice < 10000) {
+                bindingResult.reject("totalPriceMin", new Object[]{10000, resultPrice}, null);
+            }
+        }
     }
 
 }
