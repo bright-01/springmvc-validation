@@ -5,6 +5,7 @@ import hello.login.domain.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
 @Service
 @RequiredArgsConstructor
 public class LoginService {
@@ -17,8 +18,16 @@ public class LoginService {
 
 
     public Member login(String loginId, String password) {
+//        Optional<Member> findMemberOptional = memberRepository.findByLongId(loginId);
+//        Member member = findMemberOptional.get();
 
-        return null;
+//        if (member.getPassword().equals(password)) {
+//            return member;
+//        } else {
+//            return null;
+//        }
+
+        return memberRepository.findByLongId(loginId).filter(m -> m.getPassword().equals(password)).orElse(null);
     }
 
 
